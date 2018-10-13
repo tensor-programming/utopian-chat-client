@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- When user does exist move from the create-user component to the other template. -->
     <template v-if="!!user">
       <left-side></left-side>
       <right-side></right-side>
@@ -15,6 +16,7 @@ import RightSide from './components/RightSide'
 import CreateUser from './components/CreateUser'
 
 export default {
+  // map the user state to the root component.
   computed: mapState(['user']),
   components: { LeftSide, RightSide, CreateUser },
 }

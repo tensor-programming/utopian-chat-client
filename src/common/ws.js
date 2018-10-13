@@ -1,5 +1,8 @@
 import {socket} from './socket'
 
+// logic to handle the events from the backend.
+// Each event takes in the data from the client side and then emits to through the websocket based on its structure.
+// In most cases if data comes back with a message or msg field then it is rejected.
 export default {
     getUser(from) {
         return new Promise((res,rej) => {

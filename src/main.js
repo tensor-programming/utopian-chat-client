@@ -1,4 +1,4 @@
-// lodash
+// global lodash binding.
 import _ from 'lodash'
 window._ = _
 
@@ -14,6 +14,7 @@ import './assets/font-icon/iconfont.css'
 import store from './store'
 import App from './App'
 
+// add element ui to Vue
 Vue.use(ElementUI)
 
 

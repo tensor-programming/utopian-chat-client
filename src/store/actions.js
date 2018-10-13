@@ -9,7 +9,7 @@ import {
 import ws from '@/common/ws'
 
 
-
+// actions to allow the client to communicate with the websocket server and talk with the store state.
 export default {
   getUser({commit,state}) {
     return ws.getUser(state.user._id).then(user => {

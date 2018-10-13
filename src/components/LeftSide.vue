@@ -75,38 +75,50 @@
   import { mapState, mapActions } from 'vuex'
   import Vue from 'vue'
 
+  // represents the left sidebar of the application.  This bar has information that allows the user to interact with the application.
   export default {
     created() {
+      // on created, create the list and then get the user which is in the store.
       this.$store.dispatch('getList')
-      this.userParams = _.pick(this.$store.state.user, ['avatar', 'name', 'password'])
+      this.userParams = _.pick(this.$store.state.user, ['avatar', 'name'])
     },
     data() {
       return {
         groupDialog: false,
         friendDialog: false,
         modifyDialog: false,
+        // Dialog variables to tell the UI if it should show the dialogs
         keyword: '',
         userParams: ""
+
+        // user params contain the user object.  keyword is for searching out friends and groups.
       }
     },
     computed: {
+      // map the list, user, resultt, activeList, currentRoom and count state to this component.
       ...mapState(['list', 'user', 'result', 'activeList', 'currentRoom', 'count'])
     },
     methods: {
+      // map lodash functions to template functions.
       isArray: _.isArray,
       upperFirst: _.upperFirst,
       addDialog(){
+        // allows a dialog to open based on the activeList state.
         if ('friends' === this.activeList) {
           this.friendDialog = true
         } else {
           this.groupDialog = true
         }
       },
+
+      // change the active room based on the user input.
       changeActiveRoom(item) {
         let cur = this.currentRoom
         if (cur && cur._id === item._id) return
         this.$store.dispatch('changeCurrentRoom', item)
       },
+
+      // manipulate the active List state.
       changeActiveList(type) {
         if (type === this.activeList) return
 
@@ -114,13 +126,17 @@
         this.$store.dispatch('getList')
       },
       createGroup() {
+        // Allows the user to create a new group.
         if (!this.keyword) return
+        // all groups are lower case so we can't have two of the same groups 'lobby' and "Lobby"
         this.$store.dispatch('createGroup', this.keyword.toLowerCase()).then(() => this.groupDialog = false)
       },
+      // search for groups in the database.
       searchGroups() {
         if (!this.keyword) return
         this.$store.dispatch('searchGroups', this.keyword.toLowerCase())
       },
+      // search for users in the database.
       searchUsers() {
         if (!this.keyword) return
         this.$store.dispatch('searchUsers', this.keyword.toLowerCase())
@@ -131,9 +147,10 @@
       addFriend(item) {
         this.$store.dispatch('addFriend', item._id).then(() => this.friendDialog = false)
       },
-
+      // map the signout action to allow the UI to call it directly.
       ...mapActions(['signOut']),
     },
+    // wattch specific variables in real time.
     watch: {
       keyword(val) {
         if (!val) {

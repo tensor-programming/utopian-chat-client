@@ -1,6 +1,7 @@
 import store from '@/store'
 import {socket} from './socket'
 
+// Middleware for adding and removing friends from the user models.
 socket.on('addFriend',({friendId}) => {
     let {user,activeList} = store.state
     if(user && user._id == friendId && activeList === 'friends') {

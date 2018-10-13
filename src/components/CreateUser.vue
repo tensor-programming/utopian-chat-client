@@ -24,6 +24,8 @@
 <script>
 import { mapState } from 'vuex'
 
+// allows a user to sign in or be created.
+
 export default {
   data() {
     return {
@@ -35,6 +37,7 @@ export default {
     }
   },
   methods: {
+    // take the instance of the data state and pass it to the 'createUser' action.
     signIn() {
       let data = this.params
 

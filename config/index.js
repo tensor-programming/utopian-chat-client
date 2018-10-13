@@ -28,6 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      // connect to the proxies for the socket server.
       '/socket.io': {
         target: 'http://localhost:3002',
         ws: true,

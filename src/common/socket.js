@@ -1,5 +1,8 @@
+// Connect to the websocket server.
 const socket = io.connect("/")
 
+// create a listener for each group.
+// Listens for events being passed to the user from a group.
 function addGroupsListener(user,state) {
     _.forEach(user.groups,item => {
         socket.on(item,({from,data}) => {
@@ -20,6 +23,8 @@ function addGroupsListener(user,state) {
     })
 }
 
+// create a listener for each user.
+// passes events from user's friends to the user.
 function addUserListener(user,state) {
     let old = state.user
     socket.removeAllListeners(old._id)
@@ -40,6 +45,7 @@ function addUserListener(user,state) {
     })
 }
 
+// remove the group and user listeners from a client.
 function removeGroupAndUserListeners(user) {
     socket.removeAllListeners(user._id)
     _.forEach(user.groups,item => {
@@ -47,6 +53,7 @@ function removeGroupAndUserListeners(user) {
     })
 }
 
+// add a single group listener for when a user adds a single room.
 function addSingleGroupListener(groupId,state) {
     socket.on(groupId,({from,data}) => {
         if(data.type) return
@@ -66,6 +73,7 @@ function addSingleGroupListener(groupId,state) {
     })
 }
 
+// remove a single group listener for when user removes a single group.
 function removeSingleGroupListener(groupId) {
     socket.removeAllListeners(groupId)
 }

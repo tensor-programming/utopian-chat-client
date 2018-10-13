@@ -64,12 +64,19 @@ import { mapState } from 'vuex'
 export default {
     data() {
         return {
+          // message content
             content: '',
+          // room page, aka every 10 messages is a page in descending order.
             page: 1,
+          // get more messages?
             getMore: true,
+          // is getting more messages?
             gettingMoreMsgs: false,
+          // there are no more messages to get
             noMoreMsgs: false,
+          // show the members of the group
             showMember: false,
+          // members attached to group or DM
             members: '',
         }
     },
@@ -77,25 +84,31 @@ export default {
         length() {
             return this.$store.state.messages.length
         },
+        // attach the user, currentRoom, messages, and activeList state to this component.
         ...mapState(['user', 'currentRoom', 'messages', 'activeList'])
     },
     methods: {
+      // attach upperFirst lodash function to the template.
       upperFirst: _.upperFirst,
 
+      // allow the user to insert a line break when they hit the ctrl key.
         breakLine($e) {
             this.content = this.content + '\n'
             let txt = $e.target
             txt.scrollTop = txt.scrollHeight
         },
+        // submit the message to the backend.
         submitMsg(content) {
             let ctt = content || this.content
             if (!ctt) return
             this.gettingMoreMsgs = false
+            // stops user for inserting html
             this.$store.dispatch('pushMsg', ctt.replace(/</g, '&lt;').replace(/&lt;img/g, '<img'))
             if (ctt == this.content) {
                 this.content = ''
             }
         },
+        // get more messages from the server.
         getMoreMsg() {
             this.gettingMoreMsgs = true
             this.$store.commit('notChange')
@@ -109,6 +122,7 @@ export default {
                     }
                 })
         },
+        // quit the DM or the Chat room.  Removes the Group from user list and removes the friend from user model.
         quit() {
             if (this.activeList === 'friends') {
                 this.$store.dispatch('removeFriend')
@@ -120,6 +134,7 @@ export default {
             this.showMember = true
             this.$store.dispatch('getGroupMember').then(members => this.members = members)
         },
+        // handles image uploading.
         sendFile(file) {
 
             if (!file) return
@@ -139,6 +154,7 @@ export default {
                 })
                 .then(url => {
                     fileElem.reset();
+                    // create html element to serve image
                     let img = `<img src="${url.img}">`
                     this.submitMsg(img)
                     inputElem.focus()
@@ -146,6 +162,7 @@ export default {
         }
     },
     watch: {
+      // watch currentRoom and length variables.
         currentRoom(newVal) {
             if (!newVal) return
             this.getMore = true
